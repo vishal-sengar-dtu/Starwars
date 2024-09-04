@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="purple">#3E1D77</color>
+    <color name="win">#4CAF50</color>
+    <color name="loss">#F44336</color>
+    <color name="draw">#D9D8DA</color>
+</resources>
