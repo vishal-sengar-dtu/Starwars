@@ -23,7 +23,7 @@ class PlayerAdapter(
             val player = playerList[position]
 
             binding.tvName.text = player.name
-            binding.tvValue.text = player.score.toString()
+            binding.tvValue.text = player.point.toString()
             Glide.with(binding.root.rootView)
                 .load(player.icon.toString().replace("http", "https"))
                 .into(binding.logo)
@@ -48,8 +48,8 @@ class PlayerAdapter(
     }
 
     fun sortByScore(sortOrder : Boolean) : Boolean {
-        if(sortOrder) playerList.sortBy { it.score }
-        else playerList.sortByDescending { it.score }
+        if(sortOrder) playerList.sortBy { it.point }
+        else playerList.sortByDescending { it.point }
 
         notifyDataSetChanged()
         return !sortOrder

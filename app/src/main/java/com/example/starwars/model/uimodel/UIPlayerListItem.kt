@@ -10,5 +10,5 @@ data class UIPlayerListItem(
     val id : Int,
     val icon: String,
     val name: String,
-    val score: Int
+    val point: Int
 ) : Parcelable

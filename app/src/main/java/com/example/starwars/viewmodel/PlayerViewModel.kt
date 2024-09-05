@@ -26,24 +26,24 @@ class PlayerViewModel(private val repository: StarwarsRepository) : ViewModel() 
     private lateinit var apiMatchList : MatchList
     var player : UIPlayerListItem? = null
 
-    private var _playerList = MutableLiveData<UIPlayerList>()
+    private var _uiPlayerList = MutableLiveData<UIPlayerList>()
     val playerList : LiveData<UIPlayerList>
-        get() = _playerList
+        get() = _uiPlayerList
 
-    private var _matchList = MutableLiveData<UIMatchList>()
+    private var _uiMatchList = MutableLiveData<UIMatchList>()
     val matchList : LiveData<UIMatchList>
-        get() = _matchList
+        get() = _uiMatchList
 
     init {
         viewModelScope.launch {
             apiPlayerList = withContext(Dispatchers.IO) {repository.getPlayerList()}
             apiMatchList = withContext(Dispatchers.IO) {repository.getMatchList()}
 
-            _playerList.postValue(getPlayerListWithScore())
+            _uiPlayerList.postValue(getPlayerListWithPoints())
         }
     }
 
-    // filtering based on availability of player
+    // filtering matchList based on availability of player who is selected
     public fun filterMatchList() {
         val playerMatchList = UIMatchList()
 
@@ -84,39 +84,24 @@ class PlayerViewModel(private val repository: StarwarsRepository) : ViewModel() 
             }
         }
 
-        _matchList.value = playerMatchList
+        _uiMatchList.value = playerMatchList
     }
 
     // match result wrt player who is selected
     private fun getMatchResult(match: MatchListItem, player: Player): MatchResult {
-        when(player) {
-            match.player1 -> {
-                return if(match.player1.score > match.player2.score) MatchResult.Win
-                else if(match.player1.score == match.player2.score) MatchResult.Draw
-                else MatchResult.Loss
-            }
-            match.player2 -> {
-                return if(match.player2.score > match.player1.score) MatchResult.Win
-                else if(match.player1.score == match.player2.score) MatchResult.Draw
-                else MatchResult.Loss
-            }
+        return when {
+            player.id == match.player1.id && match.player1.score > match.player2.score -> MatchResult.Win
+            player.id == match.player2.id && match.player2.score > match.player1.score -> MatchResult.Win
+            match.player1.score == match.player2.score -> MatchResult.Draw
+            else -> MatchResult.Loss
         }
-        return MatchResult.Draw
     }
 
     private fun getPlayerNameFromId(id: Int): String {
-        var name = String()
-
-        apiPlayerList.forEach {
-            if(it.id == id) {
-                name = it.name
-            }
-        }
-
-        return name
+        return apiPlayerList.find { it.id == id }?.name.orEmpty()
     }
 
-    private fun getPlayerListWithScore() : UIPlayerList {
+    private fun getPlayerListWithPoints() : UIPlayerList {
         val uiPlayerList = UIPlayerList()
 
         apiPlayerList.forEach {
@@ -125,7 +110,7 @@ class PlayerViewModel(private val repository: StarwarsRepository) : ViewModel() 
                     id = it.id,
                     icon = it.icon,
                     name = it.name,
-                    score = calculateScore(it)
+                    point = calculatePoints(it)
                 )
             )
         }
@@ -133,7 +118,7 @@ class PlayerViewModel(private val repository: StarwarsRepository) : ViewModel() 
         return  uiPlayerList
     }
 
-    private fun calculateScore(player : PlayerListItem) : Int {
+    private fun calculatePoints(player : PlayerListItem) : Int {
         var score = 0
 
         apiMatchList.forEach { match ->

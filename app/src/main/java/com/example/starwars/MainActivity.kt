@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), OnPlayerClickListener {
     }
 
     override fun onPlayerClick(player : UIPlayerListItem) {
-        Toast.makeText(this, "${player.name} is selected", Toast.LENGTH_SHORT).show()
+        Log.d("VISHAL", "${player.name} is selected")
 
         viewModel.player = player
         viewModel.filterMatchList()
