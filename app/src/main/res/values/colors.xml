@@ -3,7 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="purple">#3E1D77</color>
-    <color name="win">#4CAF50</color>
-    <color name="loss">#F44336</color>
-    <color name="draw">#D9D8DA</color>
+    <color name="win">#2DDF34</color>
+    <color name="loss">#E2352A</color>
+    <color name="draw">#FAF8FF</color>
 </resources>

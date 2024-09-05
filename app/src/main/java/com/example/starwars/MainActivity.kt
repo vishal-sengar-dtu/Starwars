@@ -18,8 +18,6 @@ import com.example.starwars.viewmodel.PlayerViewModelFactory
 
 class MainActivity : AppCompatActivity(), OnPlayerClickListener {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var repository: StarwarsRepository
-    private lateinit var apiService: ApiService
     private lateinit var viewModel : PlayerViewModel
     private lateinit var playerAdapter : PlayerAdapter
     private var sortOrder : Boolean = true
@@ -31,8 +29,7 @@ class MainActivity : AppCompatActivity(), OnPlayerClickListener {
         window.statusBarColor = getColor(R.color.purple)
         setContentView(binding.root)
 
-        apiService = RetrofitInstance.apiService
-        repository = StarwarsRepository(apiService)
+        val repository : StarwarsRepository = (application as StarWarsApplication).repository
         viewModel = ViewModelProvider(this, PlayerViewModelFactory(repository))[PlayerViewModel::class.java]
 
         setObservers()
@@ -51,9 +48,6 @@ class MainActivity : AppCompatActivity(), OnPlayerClickListener {
             playerAdapter = PlayerAdapter(it, this)
             binding.rvPlayers.adapter = playerAdapter
         }
-
-        viewModel.matchList.observe(this) {
-        }
     }
 
     override fun onPlayerClick(player : UIPlayerListItem) {
@@ -69,13 +63,11 @@ class MainActivity : AppCompatActivity(), OnPlayerClickListener {
     }
 
     override fun onBackPressed() {
-        // Check if there are fragments in the backstack
         if (supportFragmentManager.backStackEntryCount > 0) {
-            supportFragmentManager.popBackStack() // Remove the top fragment from the backstack
+            supportFragmentManager.popBackStack()
         } else {
-            super.onBackPressed() // No fragments in the backstack, so call the default back action
+            super.onBackPressed()
         }
     }
-
 
 }

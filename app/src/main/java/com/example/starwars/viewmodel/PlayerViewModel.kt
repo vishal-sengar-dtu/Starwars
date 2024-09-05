@@ -43,8 +43,9 @@ class PlayerViewModel(private val repository: StarwarsRepository) : ViewModel() 
         }
     }
 
+    // filtering based on availability of player
     public fun filterMatchList() {
-        var playerMatchList = UIMatchList()
+        val playerMatchList = UIMatchList()
 
         apiMatchList.forEach {
             when(player?.id) {
@@ -86,6 +87,7 @@ class PlayerViewModel(private val repository: StarwarsRepository) : ViewModel() 
         _matchList.value = playerMatchList
     }
 
+    // match result wrt player who is selected
     private fun getMatchResult(match: MatchListItem, player: Player): MatchResult {
         when(player) {
             match.player1 -> {

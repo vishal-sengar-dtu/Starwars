@@ -30,7 +30,9 @@ class MatchFragment : Fragment() {
 
         inflatePlayerMatches()
         binding.btnBack.setOnClickListener{
-            this.onDestroy()
+            if (childFragmentManager.backStackEntryCount > 0) {
+                childFragmentManager.popBackStack()
+            }
         }
 
         return binding.root
