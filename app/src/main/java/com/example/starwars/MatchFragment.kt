@@ -29,13 +29,17 @@ class MatchFragment : Fragment() {
         binding.toolbarTitle.text = viewModel.player?.name
 
         inflatePlayerMatches()
-        binding.btnBack.setOnClickListener{
-            if (childFragmentManager.backStackEntryCount > 0) {
-                childFragmentManager.popBackStack()
-            }
-        }
+        onBackPress()
 
         return binding.root
+    }
+
+    private fun onBackPress() {
+        binding.btnBack.setOnClickListener{
+            requireActivity().supportFragmentManager.beginTransaction()
+                .remove(this)
+                .commit()
+        }
     }
 
     private fun inflatePlayerMatches() {

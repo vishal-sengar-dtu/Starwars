@@ -2,10 +2,12 @@ package com.example.starwars
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.example.starwars.adapter.OnPlayerClickListener
 import com.example.starwars.adapter.PlayerAdapter
 import com.example.starwars.databinding.ActivityMainBinding
@@ -20,7 +22,7 @@ class MainActivity : AppCompatActivity(), OnPlayerClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel : PlayerViewModel
     private lateinit var playerAdapter : PlayerAdapter
-    private var sortOrder : Boolean = true
+    private var sortOrder : Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +47,8 @@ class MainActivity : AppCompatActivity(), OnPlayerClickListener {
 
     private fun setObservers() {
         viewModel.playerList.observe(this) {
+            binding.loader.visibility = View.GONE
+            binding.rvPlayers.visibility = View.VISIBLE
             playerAdapter = PlayerAdapter(it, this)
             binding.rvPlayers.adapter = playerAdapter
         }
